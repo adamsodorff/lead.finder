@@ -2,7 +2,7 @@ import os
 
 # ─── Email ───────────────────────────────────────────────
 GMAIL_ADDRESS      = "adamsodorff@gmail.com"
-GMAIL_APP_PASSWORD = "kwrg lxlu rxyq ijcs"
+GMAIL_APP_PASSWORD = "rvdd bkxr auvf tvtx"
 ALERT_EMAIL        = "adamsodorff@icloud.com"
 
 # ─── Scanner settings ────────────────────────────────────

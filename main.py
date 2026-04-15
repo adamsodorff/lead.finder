@@ -1,6 +1,7 @@
 import time
 import logging
 from scrapers.craigslist import CraigslistScanner
+from scrapers.reddit import RedditScanner
 from notifier import send_sms
 from config import CHECK_INTERVAL_SECONDS, LOCATIONS
 
@@ -13,8 +14,10 @@ log = logging.getLogger(__name__)
 def run():
     log.info("🚀 Lead Scanner started")
     scanners = [CraigslistScanner(loc) for loc in LOCATIONS]
+    reddit = RedditScanner()
 
     while True:
+        # Craigslist
         for scanner in scanners:
             try:
                 new_leads = scanner.scan()
@@ -23,7 +26,17 @@ def run():
                     log.info(f"New lead found: {lead['title']}")
                     send_sms(msg)
             except Exception as e:
-                log.error(f"Scanner error ({scanner.location}): {e}")
+                log.error(f"Craigslist error ({scanner.location}): {e}")
+
+        # Reddit
+        try:
+            new_leads = reddit.scan()
+            for lead in new_leads:
+                msg = format_lead(lead)
+                log.info(f"New Reddit lead: {lead['title']}")
+                send_sms(msg)
+        except Exception as e:
+            log.error(f"Reddit error: {e}")
 
         log.info(f"Sleeping {CHECK_INTERVAL_SECONDS}s until next scan...")
         time.sleep(CHECK_INTERVAL_SECONDS)
